@@ -119,8 +119,23 @@
                 placeholder="select the product's price"
               />
             </div>
-            <button type="button" class="btn btn-secondary">cancel</button>
-            <button type="submit" class="btn btn-success">Submit</button>
+            <button type="submit" class="btn btn-success d-block">
+              Submit
+            </button>
+
+            <input
+              id="id"
+              type="id"
+              class="form-control"
+              placeholder="enter the product id "
+            />
+            <button
+              type="button"
+              class="btn btn-secondary"
+              onclick="deleteProduct(event)"
+            >
+              Delete
+            </button>
           </form>
         </div>
       </div>
@@ -165,9 +180,13 @@
         }
       };
 
-      const deleteProduct = async () => {
-        const url = "https://striveschool-api.herokuapp.com/api/product/";
+      const deleteProduct = async (event) => {
+        event.preventDefault();
+        let query = document.getElementById("id").value;
+        const url =
+          "https://striveschool-api.herokuapp.com/api/product/" + query;
 
+        console.log("HERE IS MYQUERY", query);
         const myProduct = {
           name: document.getElementById("name").value,
           description: document.getElementById("description").value,
@@ -175,8 +194,6 @@
           imageUrl: document.getElementById("img").value,
           price: parseInt(document.getElementById("price").value),
         };
-
-        console.log(myProduct);
 
         try {
           const response = await fetch(url, {
@@ -189,7 +206,7 @@
             },
           });
           if (response.ok) {
-            alert("product posted succesfully");
+            alert("product succesfully deleted");
           } else {
             alert("problem with submit");
           }
