@@ -22,19 +22,19 @@
       body {
         background-image: linear-gradient(
           180deg,
-          rgb(235, 34, 34),
-          rgb(146, 102, 102)
+          rgb(1, 107, 41),
+          rgb(127, 165, 129)
         );
       }
-
       nav {
-        background-color: rgb(235, 34, 34);
+        background-color: rgb(1, 107, 41);
+        position: fixed;
       }
     </style>
   </head>
   <body>
     <nav class="navbar navbar-expand-lg navbar-light">
-      <a class="navbar-brand" href="#">Strivazon</a>
+      <a class="navbar-brand font-weight-bolder" href="#">Strivazon</a>
       <button
         class="navbar-toggler"
         type="button"
@@ -49,13 +49,13 @@
 
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
-          <li class="nav-item active">
+          <li class="nav-item">
             <a class="nav-link" href="./index.html"
               >Home <span class="sr-only">(current)</span></a
             >
           </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/">backoffice</a>
+          <li class="nav-item active">
+            <a class="nav-link font-weight-bold" href="/">backoffice</a>
           </li>
         </ul>
       </div>
@@ -70,7 +70,7 @@
     <div class="container">
       <div class="row justify-content-center">
         <div id="product" class="col-md-3">
-          <h2 class="mt-5 mb-4">Backoffice</h2>
+          <h2 class="mt-5 mb-4 font-weight-bold">Backoffice</h2>
           <form onsubmit="handleSubmit(event)">
             <div class="form-group">
               <label for="name">Product name</label>
@@ -78,7 +78,7 @@
                 id="name"
                 type="text"
                 class="form-control"
-                placeholder="enter the product name..."
+                placeholder="Enter the product name..."
               />
             </div>
             <div class="form-group">
@@ -87,7 +87,7 @@
                 id="description"
                 type="textarea"
                 class="form-control"
-                placeholder="write the product's description..."
+                placeholder="Write the product's description..."
               ></textarea>
             </div>
             <div class="form-group">
@@ -96,7 +96,7 @@
                 id="brand"
                 type="text"
                 class="form-control"
-                placeholder="enter the product's brand"
+                placeholder="Enter the product's brand"
               />
             </div>
 
@@ -106,6 +106,7 @@
                 id="img"
                 type="text"
                 class="form-control"
+                placeholder="Enter the product imageUrl.."
                 onchange="document.getElementById('preview').src=this.value"
               />
               <img id="preview" />
@@ -116,25 +117,32 @@
                 id="price"
                 type="number"
                 class="form-control"
-                placeholder="select the product's price"
+                placeholder="Select the product's price"
               />
             </div>
-            <button type="submit" class="btn btn-success d-block">
+            <button type="submit" class="btn btn-success d-block mb-3">
               Submit
             </button>
 
             <input
               id="id"
               type="id"
-              class="form-control"
-              placeholder="enter the product id "
+              class="form-control mb-3"
+              placeholder="Enter the product id "
             />
             <button
               type="button"
-              class="btn btn-secondary"
+              class="btn btn-danger mb-3"
               onclick="deleteProduct(event)"
             >
               Delete
+            </button>
+            <button
+              type="button"
+              class="btn btn-danger mb-3"
+              onclick="editProduct(event)"
+            >
+              Update
             </button>
           </form>
         </div>
@@ -194,7 +202,7 @@
           imageUrl: document.getElementById("img").value,
           price: parseInt(document.getElementById("price").value),
         };
-
+        handleSubmit(query);
         try {
           const response = await fetch(url, {
             method: "DELETE",
@@ -207,12 +215,47 @@
           });
           if (response.ok) {
             alert("Product succesfully deleted");
+
+            window.location.assign("/index.html");
           } else {
             alert("ERROR: failed to delete product");
           }
+        } catch (error) {
+          console.error(error);
+        }
+      };
 
+      const editProduct = async (event) => {
+        event.preventDefault();
+        let query = document.getElementById("id").value;
+        const url =
+          "https://striveschool-api.herokuapp.com/api/product/" + query;
+
+        console.log("HERE IS MYQUERY", query);
+        const myProduct = {
+          name: document.getElementById("name").value,
+          description: document.getElementById("description").value,
+          brand: document.getElementById("brand").value,
+          imageUrl: document.getElementById("img").value,
+          price: parseInt(document.getElementById("price").value),
+        };
+
+        try {
+          const response = await fetch(url, {
+            method: "PUT",
+            body: JSON.stringify(myProduct),
+            headers: {
+              "Content-type": "application/json",
+              Authorization:
+                "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MTRiMWQwNjRiYjUzZDAwMTViMTllY2YiLCJpYXQiOjE2MzIzMTI1ODIsImV4cCI6MTYzMzUyMjE4Mn0.tSp1EnE2_Y3RGsIwKu7LMvWNTMZBAt-XyxQPWXlnb60",
+            },
+          });
           if (response.ok) {
+            alert("Product succesfully updated");
+
             window.location.assign("/index.html");
+          } else {
+            alert("ERROR: failed to update product");
           }
         } catch (error) {
           console.error(error);
