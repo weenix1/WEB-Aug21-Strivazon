@@ -16,10 +16,137 @@
       crossorigin="anonymous"
     />
 
-    <title>Hello, world!</title>
+    <title>backoffice</title>
   </head>
   <body>
-    <h1>Hello, world!</h1>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <a class="navbar-brand" href="#">Strivazon</a>
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-toggle="collapse"
+        data-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item active">
+            <a class="nav-link" href="./index.html"
+              >Home <span class="sr-only">(current)</span></a
+            >
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/">backoffice</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <!-- "name": "app test 1",  //REQUIRED
+  "description": "somthing longer", //REQUIRED
+  "brand": "nokia", //REQUIRED
+  "imageUrl": "https://drop.ndtv.com/TECH/product_database/images/2152017124957PM_635_nokia_3310.jpeg?downsize=*:420&output-quality=80", //REQUIRED
+  "price": 100, //REQUIRED -->
+
+    <div class="container">
+      <div class="row justify-content-center">
+        <div id="product" class="col-md-3">
+          <h2 class="mt-5 mb-4">Backoffice</h2>
+          <form onsubmit="handleSubmit(event)">
+            <div class="form-group">
+              <label for="name">Product name</label>
+              <input
+                id="name"
+                type="text"
+                class="form-control"
+                placeholder="enter the product name..."
+              />
+            </div>
+            <div class="form-group">
+              <label for="description">Product description</label>
+              <textarea
+                id="description"
+                type="textarea"
+                class="form-control"
+                placeholder="write the product's description..."
+              ></textarea>
+            </div>
+            <div class="form-group">
+              <label for="brand">product Brand</label>
+              <input
+                id="brand"
+                type="text"
+                class="form-control"
+                placeholder="enter the product's brand"
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="imageUrl">product images</label>
+              <input
+                id="img"
+                type="text"
+                class="form-control"
+                onchange="document.getElementById('preview').src=this.value"
+              />
+              <img id="preview" />
+            </div>
+            <div class="form-group">
+              <label for="price">product price</label>
+              <input
+                id="price"
+                type="number"
+                class="form-control"
+                placeholder="select the product's price"
+              />
+            </div>
+            <button type="button" class="btn btn-secondary">cancel</button>
+            <button type="submit" class="btn btn-primary">Submit</button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const handleSubmit = async (event) => {
+        event.preventDefault();
+        const url = "https://striveschool-api.herokuapp.com/api/product/";
+
+        const myProduct = {
+          name: document.getElementById("name").value,
+          description: document.getElementById("description").value,
+          brand: document.getElementById("brand").value,
+          imageUrl: document.getElementById("img").value,
+          price: parseInt(document.getElementById("price").value),
+        };
+
+        console.log(myProduct);
+
+        try {
+          const response = await fetch(url, {
+            method: "POST",
+            body: JSON.stringify(myProduct),
+            headers: {
+              "Content-type": "application/json",
+              Authorization:
+                "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MTRiMWQwNjRiYjUzZDAwMTViMTllY2YiLCJpYXQiOjE2MzIzMTI1ODIsImV4cCI6MTYzMzUyMjE4Mn0.tSp1EnE2_Y3RGsIwKu7LMvWNTMZBAt-XyxQPWXlnb60",
+            },
+          });
+          if (response.ok) {
+            alert("product posted succesfully");
+          } else {
+            alert("problem with submit");
+          }
+        } catch (error) {
+          console.error(error);
+        }
+      };
+    </script>
 
     <script
       src="https://code.jquery.com/jquery-3.5.1.slim.min.js"

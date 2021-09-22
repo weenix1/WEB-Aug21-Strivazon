@@ -16,10 +16,82 @@
       crossorigin="anonymous"
     />
 
-    <title>Hello, world!</title>
+    <title>Strivazon Shop</title>
   </head>
   <body>
-    <h1>Hello, world!</h1>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <a class="navbar-brand" href="#">Strivazon</a>
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-toggle="collapse"
+        data-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item active">
+            <a class="nav-link" href="/"
+              >Home <span class="sr-only">(current)</span></a
+            >
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="./backoffice.html">backoffice</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <div class="container">
+      <div id="row" class="row"></div>
+    </div>
+
+    <script>
+      const getProduct = async (url) => {
+        try {
+          const response = await fetch(url, {
+            headers: {
+              Authorization:
+                "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MTRiMWQwNjRiYjUzZDAwMTViMTllY2YiLCJpYXQiOjE2MzIzMTI1ODIsImV4cCI6MTYzMzUyMjE4Mn0.tSp1EnE2_Y3RGsIwKu7LMvWNTMZBAt-XyxQPWXlnb60",
+            },
+          });
+          if (response.ok) {
+            const body = await response.json();
+            console.log(body);
+            body.forEach((elem) => {
+              const productCard = document.getElementById("row");
+              productCard.innerHTML += `<div class="col-md-3">
+                                      <div class="card">
+                                         <img src="${elem.imageUrl}" class="img-fluid">
+                                         <div class="card-body">
+                                         <h5 class="card-title">${elem.name}</h5>
+                                         <p class="card-text">${elem.description}</p>
+                                        <span>${elem.brand}</span>
+                                        <span>${elem.price}€</span>
+                                        
+                                   </div>
+                                 </div>
+                                </div>`;
+            });
+          } else {
+            console.log("error here");
+          }
+        } catch (error) {
+          console.error(error);
+        }
+      };
+
+      window.onload = async () => {
+        const url = "https://striveschool-api.herokuapp.com/api/product/";
+
+        getProduct(url);
+      };
+    </script>
 
     <script
       src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
