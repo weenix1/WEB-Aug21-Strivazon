@@ -176,12 +176,9 @@
           });
           if (response.ok) {
             alert("product posted succesfully");
+            window.location.assign("/index.html");
           } else {
             alert("problem with submit");
-          }
-
-          if (response.ok) {
-            window.location.assign("/index.html");
           }
         } catch (error) {
           console.error(error);
